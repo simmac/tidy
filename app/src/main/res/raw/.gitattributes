@@ -1,0 +1,2 @@
+mobileclip_s2_image_opset18_rgba_opt.onnx filter=lfs diff=lfs merge=lfs -text
+mobileclip_s2_text_opset18_quant.onnx filter=lfs diff=lfs merge=lfs -text

@@ -9,32 +9,30 @@
 package com.slavabarkov.tidy
 
 import android.graphics.*
+import java.nio.ByteBuffer
 import java.nio.FloatBuffer
+import java.nio.IntBuffer
 
 const val DIM_BATCH_SIZE = 1
 const val DIM_PIXEL_SIZE = 3
 const val IMAGE_SIZE_X = 224
 const val IMAGE_SIZE_Y = 224
 
-fun preProcess(bitmap: Bitmap): FloatBuffer {
-    val imgData = FloatBuffer.allocate(
-        DIM_BATCH_SIZE * DIM_PIXEL_SIZE * IMAGE_SIZE_X * IMAGE_SIZE_Y
+fun preProcess(bitmap: Bitmap): ByteBuffer {
+    val imgData = ByteBuffer.allocate(
+        DIM_BATCH_SIZE * DIM_PIXEL_SIZE * bitmap.width * bitmap.height
     )
     imgData.rewind()
-    val stride = IMAGE_SIZE_X * IMAGE_SIZE_Y
+    val stride = bitmap.width * bitmap.height
     val bmpData = IntArray(stride)
     bitmap.getPixels(bmpData, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
-    for (i in 0 until IMAGE_SIZE_X) {
-        for (j in 0 until IMAGE_SIZE_Y) {
-            val idx = IMAGE_SIZE_Y * i + j
+    for (i in 0 until bitmap.width) {
+        for (j in 0 until bitmap.height) {
+            val idx = i*bitmap.height + j
             val pixelValue = bmpData[idx]
-            imgData.put(idx, (((pixelValue shr 16 and 0xFF) / 255f - 0.48145467f) / 0.26862955f))
-            imgData.put(
-                idx + stride, (((pixelValue shr 8 and 0xFF) / 255f - 0.4578275f) / 0.2613026f)
-            )
-            imgData.put(
-                idx + stride * 2, (((pixelValue and 0xFF) / 255f - 0.40821072f) / 0.2757771f)
-            )
+            imgData.put(idx*3, (pixelValue shr 16 and 0xFF).toByte())
+            imgData.put(idx*3 + 1, (pixelValue shr 8 and 0xFF).toByte())
+            imgData.put(idx*3 + 2, (pixelValue and 0xFF).toByte())
         }
     }
 

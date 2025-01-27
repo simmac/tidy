@@ -15,11 +15,12 @@ import com.slavabarkov.tidy.tokenizer.ClipTokenizer
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.IntBuffer
+import java.util.Collections
 import java.util.HashMap
 
 class ORTTextViewModel(application: Application) : AndroidViewModel(application) {
     private val ortEnv: OrtEnvironment = OrtEnvironment.getEnvironment()
-    private val modelID = R.raw.textual_quant
+    private val modelID = R.raw.mobileclip_s2_text_opset18_quant
     private val resources = getApplication<Application>().resources
     private val model = resources.openRawResource(modelID).readBytes()
     private val session = ortEnv.createSession(model)
@@ -76,7 +77,8 @@ class ORTTextViewModel(application: Application) : AndroidViewModel(application)
         inputMap["input_ids"] = inputIdsTensor
         inputMap["attention_mask"] = attentionMaskTensor
 
-        val output = session?.run(inputMap)
+        val output = session?.run(
+            Collections.singletonMap("input", inputIdsTensor))
         output.use {
             @Suppress("UNCHECKED_CAST") var rawOutput =
                 ((output?.get(0)?.value) as Array<FloatArray>)[0]

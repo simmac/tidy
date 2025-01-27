@@ -4,6 +4,7 @@
 
 package com.slavabarkov.tidy.viewmodels
 
+import ai.onnxruntime.OnnxJavaType
 import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment
 import android.app.Application
@@ -38,7 +39,7 @@ class ORTImageViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun generateIndex() {
-        val modelID = R.raw.visual_quant
+        val modelID = R.raw.mobileclip_s2_image_opset18_rgba_opt
         val resources = getApplication<Application>().resources
         val model = resources.openRawResource(modelID).readBytes()
         val session = ortEnv.createSession(model)
@@ -81,11 +82,11 @@ class ORTImageViewModel(application: Application) : AndroidViewModel(application
                         val bitmap: Bitmap? =
                             BitmapFactory.decodeByteArray(bytes, 0, bytes?.size ?: 0)
                         bitmap?.let {
-                            val rawBitmap = centerCrop(bitmap, 224)
-                            val inputShape = longArrayOf(1, 3, 224, 224)
-                            val inputName = "pixel_values"
-                            val imgData = preProcess(rawBitmap)
-                            val inputTensor = OnnxTensor.createTensor(ortEnv, imgData, inputShape)
+                            //val rawBitmap = centerCrop(bitmap, 224)
+                            val inputShape = longArrayOf(bitmap.height.toLong(), bitmap.width.toLong(), 3)
+                            val inputName = "input"
+                            val imgData = preProcess(bitmap)
+                            val inputTensor = OnnxTensor.createTensor(ortEnv, imgData, inputShape, OnnxJavaType.UINT8)
 
                             inputTensor.use {
                                 val output =

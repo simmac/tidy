@@ -57,26 +57,40 @@
         android:id="@+id/singeImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="83"
+        android:layout_weight="63"
         android:background="#f3f3f3"
         tools:src="@tools:sample/avatars" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:paddingTop="7dp">
+        android:layout_weight="20"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/buttonImage2Image"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Image to Image Search" />
+        <TextView
+            android:id="@+id/labels"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_weight="10"
+            android:text="" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="7dp">
+
+            <Button
+                android:id="@+id/buttonImage2Image"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Image to Image Search" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

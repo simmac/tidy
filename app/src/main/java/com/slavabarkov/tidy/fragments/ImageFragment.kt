@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.PhotoView
 import com.slavabarkov.tidy.R
+import com.slavabarkov.tidy.data.LabelEmbeddings
 import com.slavabarkov.tidy.viewmodels.ORTImageViewModel
 import com.slavabarkov.tidy.viewmodels.SearchViewModel
 import java.text.DateFormat
@@ -55,6 +56,14 @@ class ImageFragment : Fragment() {
 
         val singleImageView: PhotoView = view.findViewById(R.id.singeImageView)
         Glide.with(view).load(imageUri).into(singleImageView)
+
+        val labelsTextView: TextView = view.findViewById(R.id.labels)
+        val imageIndex = mORTImageViewModel.idxList.indexOf(imageId)
+        val imageEmbedding = mORTImageViewModel.embeddingsList[imageIndex]
+        val labels = LabelEmbeddings(resources)
+        labels.findClosestLabels(imageEmbedding).forEach { (label, prob) ->
+            labelsTextView.append("$label: $prob, ")
+        }
 
         val buttonImage2Image: Button = view.findViewById(R.id.buttonImage2Image)
         buttonImage2Image.setOnClickListener {
